@@ -1,0 +1,29 @@
+@import '../../styles/colors.scss';
+.wrapper{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: ry;
+    align-items: center;
+    justify-content: space-between ;
+    background-color: $color_darkblue   ;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    h1{
+        font-size: 14px;
+        color: white;
+    }
+
+    svg{
+        color:white;
+        height: 100%;
+        width: 30px;
+        cursor: pointer;
+    }
+
+    svg:hover{
+        color:rgba(255, 255, 255, 0.671);
+    }
+
+}
