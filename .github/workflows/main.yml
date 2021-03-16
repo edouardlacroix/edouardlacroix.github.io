@@ -6,6 +6,7 @@ jobs:
     defaults:
       run:
         working-directory: ./src
+        sudo apt-get install nodejs npm
 
     steps:
       - name: Checkout 🛎️
