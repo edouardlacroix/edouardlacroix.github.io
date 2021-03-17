@@ -9,21 +9,25 @@
     justify-content: flex-start ;
     overflow: auto;
     overflow-x: hidden;
-    // Margin for the topbar
-    margin-top:50px;
 
-    .horizontalBar{
+    .content_wrapper{
+        // Margin for the topbar
         width: 100%;
-        min-height: 400px;
-        background-color: $color_darkblue;
-        padding:10px 20px 10px 20px;
-        color:white;
-
+        height: 100%;
+        
+        .horizontalBar{
+            width: 100%;
+            min-height: 400px;
+            background-color: $color_darkblue;
+            padding:10px 20px 10px 20px;
+            color:white;
+            
+        }
+        .horizontalBar:nth-child(2n){
+            background-color: $color_mediumblue;
+            text-align: end;
+        }
+        
     }
-    .horizontalBar:nth-child(2n){
-              background-color: $color_mediumblue;
-              text-align: end;
-    }
-
 
 }
