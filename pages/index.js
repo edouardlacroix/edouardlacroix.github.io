@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.backgroundImage}>
-        <div className={styles.title} onClick={() => router.push('/welcome')}>
+        <div className={styles.title} onClick={() => router.push('/projects')}>
           <h1>Welcome</h1> <FaRegArrowAltCircleRight />
         </div>
       </div>

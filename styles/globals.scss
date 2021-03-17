@@ -6,13 +6,24 @@ body {
   margin: 0;
   font-family: 'Poppins', Verdana, sans-serif;;
 
-  /* This is used to take all the page and avoid any funky stuff */
+  /* This is used to avoid any funky stuff */
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100%;
   width: 100%;
   background-color:$color_darkblue;
+}
+
+
+// This is used to take all the available space so that we can controll the appearance down the line
+#__next {
+  background: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 a {
@@ -22,4 +33,26 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #ffffff; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:  $color_bluelight; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
