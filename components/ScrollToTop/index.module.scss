@@ -1,0 +1,31 @@
+@import '../../styles/colors.scss';
+.wrapper{
+    position: absolute;
+    bottom:30px;
+    right: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    p{
+        margin:0px;
+        color:white;
+        font-weight: bold;
+    }
+
+    svg{
+        color:white;
+        height: 100%;
+        width: 50px;
+        cursor: pointer;
+        filter: drop-shadow(0px 0px 5px #e4e4e477);
+        transition: 0.2s;
+    }
+
+    svg:hover{
+        filter: drop-shadow(0px 5px 5px #e4e4e477);
+        transition: 0.2s;
+    }
+
+}

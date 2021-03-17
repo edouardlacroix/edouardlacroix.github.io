@@ -1,43 +1,34 @@
-import Head from 'next/head'
 import styles from './index.module.scss'
 import TopBar from 'components/TopBar'
+import ScrollToTop from 'components/ScrollToTop'
 import Technologies from './components/Technologies'
+import UnityLearning from './components/UnityLearning'
+import LoveLetterFront from './components/LoveLetterFront'
+import LoveLetterServer from './components/LoveLetterServer'
+import LovEatRN from './components/LovEatRN'
+import SoundBox from './components/SoundBox'
+import LovEatPWA from './components/LovEatPWA'
+import LovEatStrapi from './components/LovEatStrapi'
+import GithubPages from './components/GithubPages'
+
 
 export default function Home() {
+
+
     return (
         <div className={styles.wrapper}>
             <TopBar />
-            <div className={styles.content_wrapper}>
-
+            <ScrollToTop />
+            <div className={styles.content_wrapper} id={'projects_div'}>
                 <Technologies />
-
-                <div className={styles.horizontalBar}>
-                    <h1>UnityLearning</h1>
-
-                </div>
-                <div className={styles.horizontalBar}>
-                    <h1>LoveLetterFront</h1>
-
-                </div>
-                <div className={styles.horizontalBar}>
-                    <h1>LoveLetterServer</h1>
-
-                </div>
-                <div className={styles.horizontalBar}>
-                    <h1>LovEat (React Native)</h1>
-
-                </div> <div className={styles.horizontalBar}>
-                    <h1>SoundBox</h1>
-
-                </div> <div className={styles.horizontalBar}>
-                    <h1>LovEat (PWA)</h1>
-
-                </div>
-
-                <div className={styles.horizontalBar}>
-                    <h1>LovEat (Strapi)</h1>
-
-                </div>
+                <LovEatPWA />
+                <LovEatStrapi />
+                <GithubPages />
+                <LoveLetterFront />
+                <LoveLetterServer />
+                <LovEatRN />
+                <UnityLearning />
+                <SoundBox />
             </div>
         </div>
     )
