@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from './index.module.scss'
-import TopBar from '../../components/TopBar'
+import TopBar from 'components/TopBar'
+import Technologies from './components/Technologies'
 
 export default function Home() {
     return (
@@ -8,11 +9,7 @@ export default function Home() {
             <TopBar />
             <div className={styles.content_wrapper}>
 
-                <div className={styles.horizontalBar}>
-                    <h1>Technologies</h1>
-                    <h2>JavaScript</h2>
-
-                </div>
+                <Technologies />
 
                 <div className={styles.horizontalBar}>
                     <h1>UnityLearning</h1>
