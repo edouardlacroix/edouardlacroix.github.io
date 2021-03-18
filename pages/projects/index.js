@@ -10,6 +10,8 @@ import SoundBox from './components/SoundBox'
 import LovEatPWA from './components/LovEatPWA'
 import LovEatStrapi from './components/LovEatStrapi'
 import GithubPages from './components/GithubPages'
+import ToLearn from './components/ToLearn'
+
 
 
 export default function Home() {
@@ -28,7 +30,8 @@ export default function Home() {
                 <LoveLetterServer />
                 <LovEatRN />
                 <UnityLearning />
-                <SoundBox />
+                {/* <SoundBox /> */}
+                {/* <ToLearn /> */}
             </div>
         </div>
     )

@@ -10,6 +10,8 @@ import STRAPILogo from 'images/strapiLogo.jpg'
 import REACTNATIVELogo from 'images/reactNativeLogo.png'
 import NEXTJSLogo from 'images/nextJsLogo.png'
 import REDUXLogo from 'images/reduxLogo.jpg'
+import GITLABLogo from 'images/GitLabCICDLogo.jpg'
+
 
 
 
@@ -19,10 +21,12 @@ const techsList = [
     { id: 2, name: 'Redux', logo: REDUXLogo, link: '' },
     { id: 3, name: 'Next Js', logo: NEXTJSLogo, link: '' },
     { id: 4, name: 'JavaScript', logo: JSLogo, link: '' },
-    { id: 5, name: 'Scss', logo: SCSSLogo, link: '' },
-    { id: 6, name: 'TypeScript', logo: TSLogo, link: '' },
-    { id: 7, name: 'Strapi', logo: STRAPILogo, link: '' },
-    { id: 8, name: 'React Native', logo: REACTNATIVELogo, link: '' },
+    { id: 5, name: 'GitLab CI/CD', logo: GITLABLogo, link: '' },
+    { id: 6, name: 'Scss', logo: SCSSLogo, link: '' },
+    { id: 7, name: 'TypeScript', logo: TSLogo, link: '' },
+    { id: 8, name: 'Strapi', logo: STRAPILogo, link: '' },
+    { id: 9, name: 'React Native', logo: REACTNATIVELogo, link: '' },
+
     // { id: 9, name: 'C#', logo: CSHARPLogo, link: '' },
 
 

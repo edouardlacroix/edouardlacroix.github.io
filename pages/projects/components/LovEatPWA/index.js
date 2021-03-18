@@ -2,7 +2,6 @@ import styles from './index.module.scss'
 import parentStyle from '../../index.module.scss'
 import { useRouter } from 'next/router'
 import CarouselWrapper from 'components/CarouselWrapper'
-import { AiOutlineLink } from 'react-icons/ai';
 import LovEat1 from 'images/LovEat/LovEat1.png'
 import LovEat2 from 'images/LovEat/LovEat2.png'
 import LovEat3 from 'images/LovEat/LovEat3.png'
