@@ -9,18 +9,22 @@ import REACTLogo from 'images/reactLogo.jpg'
 import STRAPILogo from 'images/strapiLogo.jpg'
 import REACTNATIVELogo from 'images/reactNativeLogo.png'
 import NEXTJSLogo from 'images/nextJsLogo.png'
+import REDUXLogo from 'images/reduxLogo.jpg'
+
 
 
 // Here we can controll the list of logo displayed
 const techsList = [
-    { id: 1, name: 'JavaScript', logo: JSLogo, link: '' },
-    { id: 2, name: 'TypeScript', logo: TSLogo, link: '' },
-    { id: 3, name: 'Scss', logo: SCSSLogo, link: '' },
-    { id: 4, name: 'C#', logo: CSHARPLogo, link: '' },
-    { id: 5, name: 'React', logo: REACTLogo, link: '' },
-    { id: 6, name: 'Strapi', logo: STRAPILogo, link: '' },
-    { id: 7, name: 'React Native', logo: REACTNATIVELogo, link: '' },
-    { id: 7, name: 'Next Js', logo: NEXTJSLogo, link: '' },
+    { id: 1, name: 'React', logo: REACTLogo, link: '' },
+    { id: 2, name: 'Redux', logo: REDUXLogo, link: '' },
+    { id: 3, name: 'Next Js', logo: NEXTJSLogo, link: '' },
+    { id: 4, name: 'JavaScript', logo: JSLogo, link: '' },
+    { id: 5, name: 'Scss', logo: SCSSLogo, link: '' },
+    { id: 6, name: 'TypeScript', logo: TSLogo, link: '' },
+    { id: 7, name: 'Strapi', logo: STRAPILogo, link: '' },
+    { id: 8, name: 'React Native', logo: REACTNATIVELogo, link: '' },
+    // { id: 9, name: 'C#', logo: CSHARPLogo, link: '' },
+
 
 ]
 
