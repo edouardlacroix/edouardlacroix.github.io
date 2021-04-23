@@ -41,7 +41,7 @@ const projectList = [
     { id: 5, name: 'LoveLetterServer', idToScroll: "#loveLetterServer_div", link: '' },
     { id: 6, name: 'LovEat - RN ', idToScroll: "#loveat_rn_div", link: '' },
     { id: 7, name: 'UnityLearning ', idToScroll: "#unityLearning_div", link: '' },
-    { id: 8, name: 'SoundBox - RN ', idToScroll: "#soundbox_div", link: '' },
+//     { id: 8, name: 'SoundBox - RN ', idToScroll: "#soundbox_div", link: '' },
 ]
 
 export default function Technologies() {
