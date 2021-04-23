@@ -23,9 +23,8 @@ export default function UnityLearning() {
                         <p>C#</p>
 
                         <h3>Objectives</h3>
-                        <p>• Learn the process of game development on Unity.</p>
-                        <p>• Allow the game to run, calculate different effects of card, winner, etc...</p>
-
+                        <p>• Learn the process of game development with Unity.</p>
+                      
                         <h3>Hosting</h3>
                         <p>None for now</p>
                         <div className={parentStyle.linkWrapper}>
@@ -36,7 +35,7 @@ export default function UnityLearning() {
                             <div className={parentStyle.link} onClick={() => window.location = 'https://github.com/edouardlacroix/UnityLearning'}
                                 onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/UnityLearning') : null}>
                                 <ImGithub />
-                                <a>edouardlacroix/LoveLetterServer</a>
+                                <a>edouardlacroix/UnityLearning</a>
                             </div>
                         </div>
 
