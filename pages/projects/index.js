@@ -11,6 +11,8 @@ import LovEatPWA from './components/LovEatPWA'
 import LovEatStrapi from './components/LovEatStrapi'
 import GithubPages from './components/GithubPages'
 import ToLearn from './components/ToLearn'
+import ISSViewer from './components/ISSViewer'
+
 
 
 
@@ -30,6 +32,7 @@ export default function Home() {
                 <LoveLetterServer />
                 <LovEatRN />
                 <UnityLearning />
+                <ISSViewer />
                 {/* <SoundBox /> */}
                 {/* <ToLearn /> */}
             </div>
