@@ -12,6 +12,7 @@ import LovEatStrapi from './components/LovEatStrapi'
 import GithubPages from './components/GithubPages'
 import ToLearn from './components/ToLearn'
 import ISSViewer from './components/ISSViewer'
+import SubMenu from '../../components/SubMenu'
 
 
 
@@ -25,6 +26,7 @@ export default function Home() {
             <ScrollToTop />
             <div className={styles.content_wrapper} id={'projects_div'}>
                 <Technologies />
+                <SubMenu />
                 <LovEatPWA />
                 <LovEatStrapi />
                 <GithubPages />

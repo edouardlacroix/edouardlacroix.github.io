@@ -1,0 +1,74 @@
+@import 'styles/colors.scss';
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: sticky; 
+    background-color: #102e3f;
+    top: 0; 
+    z-index: 10;
+    -webkit-box-shadow: 0px 10px 15px 3px rgba(141, 141, 141, 0.13); 
+    box-shadow: 0px 6px 15px 3px rgba(141, 141, 141, 0.13);
+    
+    .anchorsWrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin:0.5em 0em;
+        
+        .anchor{
+            border: 1px solid white;
+            border-radius: 50em;
+            margin:5px 10px 5px 10px;
+            padding:10px 20px 10px 20px;
+            cursor: pointer;
+            color:white;
+        }
+        .anchor:hover{
+            background-color: white;
+            color:black;
+        }
+    }
+  
+}
+
+
+@media screen and (max-width:800px) {
+
+    .wrapper{
+        .anchorsWrapper{
+            margin:0.5em 0em;
+            
+            .anchor{
+                border-radius: 50em;
+                padding:0.5em 1em;
+                font-size: 0.8em;
+            }
+           
+        }
+    
+    }
+    
+}
+
+
+@media screen and (max-width:600px) {
+
+    .wrapper{
+        position: relative;
+        .anchorsWrapper{
+            margin:0.5em 0em;
+            
+            .anchor{
+                border-radius: 50em;
+                padding:0.5em 1em;
+                font-size: 0.8em;
+            }
+           
+        }
+    
+    }
+    
+}
