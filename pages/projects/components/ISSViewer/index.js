@@ -25,11 +25,11 @@ export default function ISSViewer() {
                         <h3>Hosting</h3>
                         <p>Vercel</p>
                         <div className={parentStyle.linkWrapper}>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://iss-viewer.vercel.app/'}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://iss-viewer.vercel.app/', '_blank')}>
                                 <BsFillTriangleFill />
                                 <a>iss-viewer.vercel.app</a>
                             </div>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://github.com/edouardlacroix/UnityLearning'}
+                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/UnityLearning', '_blank')}
                                 onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/ISSViewer') : null}>
                                 <ImGithub />
                                 <a>edouardlacroix/ISSViewer</a>

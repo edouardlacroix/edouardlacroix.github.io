@@ -31,12 +31,12 @@ export default function LoveLetterBack() {
                         <h3>Hosting</h3>
                         <p>Github Pages</p>
                         <div className={parentStyle.linkWrapper}>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://loveletterback.herokuapp.com/'}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://loveletterback.herokuapp.com/', '_blank')}>
                                 <SiHeroku />
                                 <a >loveletterback.herokuapp.com</a>
                             </div>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://github.com/edouardlacroix/LoveLetterServer'}
-                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/LoveLetterServer') : null}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/LoveLetterServer', '_blank')}
+                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/LoveLetterServer', '_blank') : null}>
                                 <ImGithub />
                                 <a>edouardlacroix/LoveLetterServer</a>
                             </div>

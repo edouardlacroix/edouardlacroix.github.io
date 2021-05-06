@@ -24,16 +24,16 @@ export default function UnityLearning() {
 
                         <h3>Objectives</h3>
                         <p>• Learn the process of game development with Unity.</p>
-                      
+
                         <h3>Hosting</h3>
                         <p>None for now</p>
                         <div className={parentStyle.linkWrapper}>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://www.youtube.com/watch?v=Y3-iYIs16TI&list=PLUWxWDlz8PYKnrd27LTqOxL2lr3KhEVRT'}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://www.youtube.com/watch?v=Y3-iYIs16TI&list=PLUWxWDlz8PYKnrd27LTqOxL2lr3KhEVRT', '_blank')}>
                                 <AiFillYoutube />
                                 <a>youtube/tutoriel</a>
                             </div>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://github.com/edouardlacroix/UnityLearning'}
-                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/UnityLearning') : null}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/UnityLearning', '_blank')}
+                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/UnityLearning', '_blank') : null}>
                                 <ImGithub />
                                 <a>edouardlacroix/UnityLearning</a>
                             </div>

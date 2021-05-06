@@ -35,7 +35,7 @@ export default function LovEatRN() {
                             </div>
                             <div className={parentStyle.link}>
                                 <ImGithub />
-                                <a onClick={() => window.location = 'https://github.com/edouardlacroix/LovEat'}>edouardlacroix/LovEat</a>
+                                <a onClick={() => window.open('https://github.com/edouardlacroix/LovEat', '_blank')}>edouardlacroix/LovEat</a>
                             </div>
                         </div>
 

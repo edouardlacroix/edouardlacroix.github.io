@@ -29,11 +29,11 @@ export default function LovEatStrapi() {
                         <div className={parentStyle.linkWrapper}>
                             <div className={parentStyle.link}>
                                 <SiStrapi />
-                                <a onClick={() => window.location = 'https://loveat-back.herokuapp.com/'}>loveat-back.herokuapp.com</a>
+                                <a onClick={() => window.open('https://loveat-back.herokuapp.com/', '_blank')}>loveat-back.herokuapp.com</a>
                             </div>
                             <div className={parentStyle.link}>
                                 <ImGithub />
-                                <a onClick={() => window.location = 'https://github.com/edouardlacroix/loveat-pwa-back'}>edouardlacroix/loveat-pwa-back</a>
+                                <a onClick={() => window.open('https://github.com/edouardlacroix/loveat-pwa-back', '_blank')}>edouardlacroix/loveat-pwa-back</a>
                             </div>
                         </div>
 

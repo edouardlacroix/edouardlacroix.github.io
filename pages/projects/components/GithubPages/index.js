@@ -29,12 +29,12 @@ export default function GithubPages() {
                         <h3>Hosting</h3>
                         <p>Github Pages</p>
                         <div className={parentStyle.linkWrapper}>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://edouardlacroix.github.io/'}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://edouardlacroix.github.io/', '_blank')}>
                                 <ImGithub />
                                 <a >This</a>
                             </div>
-                            <div className={parentStyle.link} onClick={() => window.location = 'https://github.com/edouardlacroix/edouardlacroix.github.io'}
-                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/edouardlacroix.github.io') : null}>
+                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/edouardlacroix.github.io', '_blank')}
+                                onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/edouardlacroix.github.io', '_blank') : null}>
                                 <ImGithub />
                                 <a >edouardlacroix/edouardlacroix.github.io</a>
                             </div>

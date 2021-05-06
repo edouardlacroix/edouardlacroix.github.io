@@ -34,11 +34,11 @@ export default function LoveLetterFront() {
                         <div className={parentStyle.linkWrapper}>
                             <div className={parentStyle.link}>
                                 <SiHeroku />
-                                <a onClick={() => window.location = 'https://loveletterfront.herokuapp.com/'}>loveletterfront.herokuapp.com</a>
+                                <a onClick={() => window.open('https://loveletterfront.herokuapp.com/', '_blank')}>loveletterfront.herokuapp.com</a>
                             </div>
                             <div className={parentStyle.link}>
                                 <ImGithub />
-                                <a onClick={() => window.location = 'https://github.com/edouardlacroix/LoveLetterFront'}>edouardlacroix/LoveLetterFront</a>
+                                <a onClick={() => window.open('https://github.com/edouardlacroix/LoveLetterFront', '_blank')}>edouardlacroix/LoveLetterFront</a>
                             </div>
                         </div>
 

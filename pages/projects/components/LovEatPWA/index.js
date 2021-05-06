@@ -39,11 +39,11 @@ export default function LovEatPWA() {
                         <div className={parentStyle.linkWrapper}>
                             <div className={parentStyle.link}>
                                 <RiReactjsLine />
-                                <a onClick={() => window.location = 'https://loveat.vercel.app/'}>loveat.vercel.app</a>
+                                <a onClick={() => window.open('https://loveat.vercel.app/', '_blank')}>loveat.vercel.app</a>
                             </div>
                             <div className={parentStyle.link}>
                                 <ImGithub />
-                                <a onClick={() => window.location = 'https://github.com/edouardlacroix/LovEat-pwa'}>edouardlacroix/LovEat-pwa</a>
+                                <a onClick={() => window.open('https://github.com/edouardlacroix/LovEat-pwa', '_blank')}>edouardlacroix/LovEat-pwa</a>
                             </div>
                         </div>
 
