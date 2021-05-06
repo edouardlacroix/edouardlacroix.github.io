@@ -29,7 +29,7 @@ export default function ISSViewer() {
                                 <BsFillTriangleFill />
                                 <a>iss-viewer.vercel.app</a>
                             </div>
-                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/UnityLearning', '_blank')}
+                            <div className={parentStyle.link} onClick={() => window.open('https://github.com/edouardlacroix/ISSViewer', '_blank')}
                                 onMouseDown={(event) => event.button === 1 ? window.open('https://github.com/edouardlacroix/ISSViewer') : null}>
                                 <ImGithub />
                                 <a>edouardlacroix/ISSViewer</a>
