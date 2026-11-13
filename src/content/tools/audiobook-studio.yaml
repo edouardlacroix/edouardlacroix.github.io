@@ -1,0 +1,7 @@
+name: Audiobook Studio
+slot: 0
+status: wip
+url: https://audio-book-studio.vercel.app
+description:
+  fr: Enregistre un livre audio par prises, directement depuis le navigateur.
+  en: Record an audiobook take by take, right from the browser.

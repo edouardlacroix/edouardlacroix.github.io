@@ -1,0 +1,436 @@
+---
+import { ui, type Locale } from '../i18n/ui';
+import { SLOTS, VIEW } from '../lib/geometry';
+import { toItems } from '../lib/items';
+import { HUB_TINT, SEED_HUB_TINT } from '../lib/palette';
+import type { Tool } from '../lib/tools';
+
+interface Props {
+  slots: (Tool | null)[];
+  locale: Locale;
+}
+
+const { slots, locale } = Astro.props;
+const t = ui[locale];
+const items = toItems(slots, locale).map((item) => ({ ...item, slot: SLOTS[item.index] }));
+const at = ({ slot, color }: (typeof items)[number]) =>
+  `--c:${color};left:${slot.left}%;top:${slot.top}%`;
+---
+
+<div class="nexus">
+  <div class="stage" data-stage role="group" aria-label={t.nexusLabel}>
+    <svg viewBox={`0 0 ${VIEW} ${VIEW}`} aria-hidden="true">
+      <defs>
+        <filter id="glow" filterUnits="userSpaceOnUse" x="-40" y="-40" width={VIEW + 80} height={VIEW + 80}>
+          <feGaussianBlur stdDeviation="7" />
+        </filter>
+        <linearGradient id="ring" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VIEW} y2="0">
+          <stop offset="0" stop-color="#F26FA8" />
+          <stop offset=".5" stop-color="#FFB65C" />
+          <stop offset="1" stop-color="#7CC8FF" />
+        </linearGradient>
+        {items.map((item) => (
+          <linearGradient
+            id={`branch-${item.index}`}
+            gradientUnits="userSpaceOnUse"
+            x1={item.slot.gradient.x0}
+            y1={item.slot.gradient.y0}
+            x2={item.slot.gradient.x1}
+            y2={item.slot.gradient.y1}
+          >
+            <stop offset="0" stop-color={item.seed ? SEED_HUB_TINT : HUB_TINT} />
+            <stop offset="1" stop-color={item.color} />
+          </linearGradient>
+        ))}
+      </defs>
+
+      <!-- Le contour se dessine depuis le haut, vers la droite. -->
+      <circle class="ring ring-glow" cx={VIEW / 2} cy={VIEW / 2} r="390" pathLength="1" transform={`rotate(-90 ${VIEW / 2} ${VIEW / 2})`} stroke="url(#ring)" filter="url(#glow)" />
+      <circle class="ring" cx={VIEW / 2} cy={VIEW / 2} r="390" pathLength="1" transform={`rotate(-90 ${VIEW / 2} ${VIEW / 2})`} stroke="url(#ring)" />
+      <circle class="orbit" cx={VIEW / 2} cy={VIEW / 2} r="262" />
+      <circle class="orbit orbit-inner" cx={VIEW / 2} cy={VIEW / 2} r="161" />
+
+      {items.map((item) => (
+        <g class:list={['br', { 'is-seed': item.seed }]} data-i={item.index}>
+          <path class="branch-glow" d={item.slot.path} stroke={`url(#branch-${item.index})`} stroke-width={item.big ? 12 : 9} filter="url(#glow)" />
+          <path
+            class="branch"
+            d={item.slot.path}
+            stroke={`url(#branch-${item.index})`}
+            stroke-width={item.big ? 2.6 : 2}
+            stroke-dasharray={item.seed ? '3 9' : undefined}
+          />
+        </g>
+      ))}
+    </svg>
+
+    <div class="hub" aria-hidden="true"></div>
+
+    {items.map((item) => <div class:list={['halo', { 'is-seed': item.seed }]} style={`${at(item)};width:${item.slot.size * 3.6}%`} data-i={item.index} aria-hidden="true" />)}
+
+    {items.map((item) => {
+      const props = {
+        class: ['node', item.big ? 'big' : '', item.seed ? 'is-seed' : ''].join(' ').trim(),
+        style: `${at(item)};width:${item.slot.size}%`,
+        'data-i': item.index,
+        'data-name': item.name,
+        'data-status': item.status,
+        'data-desc': item.description,
+        'data-href': item.href,
+        'data-host': item.host,
+      };
+      if (item.seed) return <span {...props} aria-hidden="true">+</span>;
+      if (item.href) return <a {...props} href={item.href} target="_blank" rel="noopener" aria-label={item.name}><span aria-hidden="true">{item.initial}</span></a>;
+      return <span {...props} tabindex="0" role="img" aria-label={`${item.name} (${item.status})`}><span aria-hidden="true">{item.initial}</span></span>;
+    })}
+
+    {items.map((item) => <span class:list={['label', { big: item.big, 'is-seed': item.seed }]} style={`--c:${item.color};${item.slot.label}`} data-i={item.index} aria-hidden="true">{item.name}</span>)}
+  </div>
+
+  <aside class="fiche" data-fiche aria-live="polite">
+    <div class="fiche-status"><span class="dot"></span><span data-fiche-status></span></div>
+    <h2 data-fiche-name></h2>
+    <p data-fiche-desc></p>
+    <a class="fiche-link" data-fiche-link target="_blank" rel="noopener" hidden></a>
+  </aside>
+</div>
+
+<script>
+  const stage = document.querySelector<HTMLElement>('[data-stage]');
+  const fiche = document.querySelector<HTMLElement>('[data-fiche]');
+
+  if (stage && fiche) {
+    const part = <T extends HTMLElement>(selector: string) => fiche.querySelector<T>(selector)!;
+    const status = part('[data-fiche-status]');
+    const name = part('[data-fiche-name]');
+    const description = part('[data-fiche-desc]');
+    const link = part<HTMLAnchorElement>('[data-fiche-link]');
+    let timer = 0;
+
+    const highlight = (index: string | null) => {
+      stage.classList.toggle('is-hovering', index !== null);
+      stage.querySelectorAll<HTMLElement>('[data-i]').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.i === index);
+      });
+    };
+
+    const show = (node: HTMLElement) => {
+      window.clearTimeout(timer);
+      highlight(node.dataset.i ?? null);
+      fiche.style.setProperty('--c', node.style.getPropertyValue('--c'));
+      status.textContent = node.dataset.status ?? '';
+      name.textContent = node.dataset.name ?? '';
+      description.textContent = node.dataset.desc ?? '';
+      const href = node.dataset.href;
+      link.hidden = !href;
+      if (href) {
+        link.href = href;
+        link.textContent = `${node.dataset.host} ↗`;
+      }
+      fiche.classList.add('is-visible');
+    };
+
+    // Un court délai laisse le temps d'aller de l'outil à sa fiche.
+    const hideSoon = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        highlight(null);
+        fiche.classList.remove('is-visible');
+      }, 250);
+    };
+
+    stage.querySelectorAll<HTMLElement>('.node').forEach((node) => {
+      node.addEventListener('pointerenter', () => show(node));
+      node.addEventListener('pointerleave', hideSoon);
+      node.addEventListener('focus', () => show(node));
+      node.addEventListener('blur', hideSoon);
+    });
+    fiche.addEventListener('pointerenter', () => window.clearTimeout(timer));
+    fiche.addEventListener('pointerleave', hideSoon);
+  }
+</script>
+
+<style>
+  .nexus {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 40px 56px 24px;
+  }
+
+  .stage {
+    position: relative;
+    aspect-ratio: 1;
+    width: min(100%, 740px, calc(100dvh - 96px));
+    container-type: inline-size;
+  }
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .ring {
+    fill: none;
+    stroke-dasharray: 1;
+    animation: ring-draw 2.6s cubic-bezier(0.45, 0.05, 0.3, 1) both;
+  }
+  .ring-glow {
+    stroke-width: 7;
+    opacity: 0.28;
+  }
+  .ring:not(.ring-glow) {
+    stroke-width: 1.6;
+    opacity: 0.7;
+  }
+  @keyframes ring-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .orbit {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1;
+    stroke-dasharray: 2 9;
+    opacity: 0.16;
+  }
+  .orbit-inner {
+    opacity: 0.12;
+  }
+
+  .br {
+    transition: opacity 0.25s;
+  }
+  .branch,
+  .branch-glow {
+    fill: none;
+    stroke-linecap: round;
+    transition:
+      stroke-width 0.25s,
+      opacity 0.25s;
+  }
+  .branch-glow {
+    opacity: 0.28;
+  }
+  .br.is-seed .branch-glow {
+    opacity: 0;
+  }
+  .br.is-active .branch {
+    stroke-width: 4;
+  }
+  .br.is-active .branch-glow {
+    opacity: 1;
+  }
+  .is-hovering .br:not(.is-active) {
+    opacity: 0.4;
+  }
+
+  .hub {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20.5%;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid #ffe9cc;
+    background: radial-gradient(circle at 50% 40%, #2c2048 0, #14101f 70%);
+    box-shadow:
+      0 0 44px #ffb65c77,
+      0 0 110px #f26fa833,
+      inset 0 0 30px #ffb65c33;
+  }
+
+  .halo {
+    position: absolute;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%) scale(0.85);
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--c) 18%, transparent) 0, transparent 68%);
+    pointer-events: none;
+    transition:
+      opacity 0.3s,
+      transform 0.3s;
+  }
+  .halo.is-seed {
+    opacity: 0;
+  }
+  .halo.is-active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+    background: radial-gradient(circle, color-mix(in srgb, var(--c) 59%, transparent) 0, transparent 68%);
+  }
+  .is-hovering .halo:not(.is-active) {
+    opacity: 0.3;
+  }
+
+  .node {
+    position: absolute;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--c);
+    background: #14101f;
+    color: var(--c);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2.4cqw;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--c) 33%, transparent);
+    transition:
+      transform 0.25s,
+      opacity 0.25s,
+      background 0.25s,
+      box-shadow 0.25s;
+  }
+  .node.big {
+    font-size: 3.2cqw;
+  }
+  .node.is-seed {
+    border-style: dashed;
+    box-shadow: none;
+    cursor: default;
+  }
+  .node.is-active {
+    transform: translate(-50%, -50%) scale(1.12);
+    background: color-mix(in srgb, var(--c) 20%, #14101f);
+    box-shadow:
+      0 0 26px var(--c),
+      0 0 80px color-mix(in srgb, var(--c) 60%, transparent),
+      inset 0 0 24px color-mix(in srgb, var(--c) 33%, transparent);
+  }
+  .is-hovering .node:not(.is-active) {
+    opacity: 0.4;
+  }
+
+  .label {
+    position: absolute;
+    font-weight: 600;
+    font-size: clamp(11px, 2cqw, 16px);
+    white-space: nowrap;
+    pointer-events: none;
+    transition:
+      opacity 0.25s,
+      color 0.25s,
+      text-shadow 0.25s;
+  }
+  .label.big {
+    font-size: clamp(12px, 2.7cqw, 22px);
+  }
+  .label.is-seed {
+    font-style: italic;
+    color: var(--muted);
+  }
+  .label.is-active {
+    color: var(--c);
+    text-shadow: 0 0 16px var(--c);
+  }
+  .is-hovering .label:not(.is-active) {
+    opacity: 0.4;
+  }
+
+  .fiche {
+    position: absolute;
+    right: 56px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 260px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: rgb(21 16 34 / 0.8);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.35s ease,
+      visibility 0.35s;
+  }
+  .fiche.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  .fiche-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--soft);
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: 0 0 10px var(--c);
+  }
+  .fiche h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--c);
+  }
+  .fiche p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--soft);
+  }
+  .fiche-link {
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--c);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .fiche-link:hover {
+    filter: brightness(1.25);
+  }
+
+  /* Sur écran moyen, la fiche flotte en bas au lieu de se glisser à côté du cercle. */
+  @media (max-width: 1100px) {
+    .nexus {
+      padding: 32px 24px 24px;
+    }
+    .fiche {
+      position: fixed;
+      left: 50%;
+      right: auto;
+      top: auto;
+      bottom: 24px;
+      transform: translateX(-50%);
+      width: min(420px, calc(100% - 32px));
+      min-height: 0;
+      z-index: 2;
+    }
+  }
+
+  /* Sur téléphone, la liste verticale prend le relais (voir NexusList.astro). */
+  @media (max-width: 760px) {
+    .nexus {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,7 @@
+name: Wikidden
+slot: 2
+status: live
+url: https://wikidden.vercel.app
+description:
+  fr: Version française de Redactle. Retrouve l'article Wikipédia caché.
+  en: A French take on Redactle. Find the hidden Wikipedia article.

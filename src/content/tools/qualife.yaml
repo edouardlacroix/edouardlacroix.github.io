@@ -1,0 +1,7 @@
+name: QuaLife
+slot: 1
+status: live
+url: https://qualife-theta.vercel.app
+description:
+  fr: Explore les quartiers à partir de données publiques ouvertes.
+  en: Explore neighborhoods using open public data.

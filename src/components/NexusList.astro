@@ -1,0 +1,165 @@
+---
+import { ui, type Locale } from '../i18n/ui';
+import { toItems } from '../lib/items';
+import type { Tool } from '../lib/tools';
+
+interface Props {
+  slots: (Tool | null)[];
+  locale: Locale;
+}
+
+const { slots, locale } = Astro.props;
+const items = toItems(slots, locale);
+---
+
+<ol class="vine" aria-label={ui[locale].nexusLabel}>
+  {items.map((item) => {
+    const Tag = item.href ? 'a' : 'div';
+    return (
+      <li>
+        <Tag
+          class:list={['row', { 'is-seed': item.seed }]}
+          style={`--c:${item.color}`}
+          href={item.href}
+          target={item.href ? '_blank' : undefined}
+          rel={item.href ? 'noopener' : undefined}
+        >
+          <span class="bulb" aria-hidden="true">{item.initial}</span>
+          <span class="text">
+            <span class="status">{item.status}</span>
+            <span class="name">{item.name}</span>
+            <span class="desc">{item.description}</span>
+          </span>
+        </Tag>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .vine {
+    display: none;
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 32px 16px 16px;
+    list-style: none;
+  }
+
+  /* Le tronc lumineux, à gauche, d'où partent toutes les branches. */
+  .vine::before {
+    content: '';
+    position: absolute;
+    left: 44px;
+    top: 0;
+    bottom: 0;
+    width: 2.5px;
+    border-radius: 2px;
+    background: linear-gradient(#f26fa8, #ffb65c, #7cc8ff);
+    box-shadow: 0 0 14px rgb(255 182 92 / 0.5);
+  }
+
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+    min-height: 104px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* La branche entre le tronc et le nœud. */
+  .row::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    width: 40px;
+    height: 2.5px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #fff3e0, var(--c));
+    box-shadow: 0 0 10px color-mix(in srgb, var(--c) 60%, transparent);
+  }
+
+  .bulb {
+    justify-self: end;
+    width: 52px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--c);
+    background: #14101f;
+    color: var(--c);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--c) 33%, transparent);
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s,
+      background 0.25s;
+  }
+
+  a.row:hover .bulb,
+  a.row:focus-visible .bulb,
+  a.row:active .bulb {
+    transform: scale(1.1);
+    background: color-mix(in srgb, var(--c) 20%, #14101f);
+    box-shadow:
+      0 0 22px var(--c),
+      0 0 64px color-mix(in srgb, var(--c) 60%, transparent),
+      inset 0 0 18px color-mix(in srgb, var(--c) 33%, transparent);
+  }
+
+  .is-seed .bulb {
+    border-style: dashed;
+    box-shadow: none;
+  }
+  .is-seed .row::before,
+  .row.is-seed::before {
+    opacity: 0.5;
+    box-shadow: none;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .status {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .name {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .desc {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--soft);
+  }
+  .is-seed .name {
+    font-style: italic;
+    color: var(--muted);
+  }
+  a.row:hover .name,
+  a.row:focus-visible .name {
+    color: var(--c);
+    text-shadow: 0 0 14px var(--c);
+  }
+
+  @media (max-width: 760px) {
+    .vine {
+      display: block;
+    }
+  }
+</style>
