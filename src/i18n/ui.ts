@@ -14,7 +14,7 @@ export interface Messages {
 
 export const ui: Record<Locale, Messages> = {
   fr: {
-    title: 'Nexus · Édouard Lacroix',
+    title: 'Nexus',
     description: 'Tous mes outils au même endroit. Chacun vit à sa propre adresse.',
     nexusLabel: 'Mes outils autour du centre',
     statuses: { live: 'en ligne', wip: 'en construction', draft: 'à décrire', soon: 'à venir' },
@@ -24,7 +24,7 @@ export const ui: Record<Locale, Messages> = {
     otherLanguage: 'English',
   },
   en: {
-    title: 'Nexus · Édouard Lacroix',
+    title: 'Nexus',
     description: 'All my tools in one place. Each one lives at its own address.',
     nexusLabel: 'My tools around the center',
     statuses: { live: 'live', wip: 'in progress', draft: 'to describe', soon: 'coming soon' },
