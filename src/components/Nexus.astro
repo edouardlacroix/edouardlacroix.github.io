@@ -64,6 +64,7 @@ const at = ({ slot, color }: (typeof items)[number]) =>
       ))}
     </svg>
 
+    <div class="heart" aria-hidden="true"></div>
     <div class="hub" aria-hidden="true"></div>
 
     {items.map((item) => <div class:list={['halo', { 'is-seed': item.seed }]} style={`${at(item)};width:${item.slot.size * 3.6}%`} data-i={item.index} aria-hidden="true" />)}
@@ -152,6 +153,9 @@ const at = ({ slot, color }: (typeof items)[number]) =>
 
 <style>
   .nexus {
+    /* Même durée et même courbe à l'allumage et à l'extinction : la lumière monte et descend pareil. */
+    --t: 0.8s;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     flex: 1;
     display: flex;
@@ -210,15 +214,15 @@ const at = ({ slot, color }: (typeof items)[number]) =>
   }
 
   .br {
-    transition: opacity 0.25s;
+    transition: opacity var(--t) var(--ease);
   }
   .branch,
   .branch-glow {
     fill: none;
     stroke-linecap: round;
     transition:
-      stroke-width 0.25s,
-      opacity 0.25s;
+      stroke-width var(--t) var(--ease),
+      opacity var(--t) var(--ease);
   }
   .branch-glow {
     opacity: 0.28;
@@ -250,18 +254,78 @@ const at = ({ slot, color }: (typeof items)[number]) =>
       0 0 44px #ffb65c77,
       0 0 110px #f26fa833,
       inset 0 0 30px #ffb65c33;
+    animation: hubbeat 2.6s ease-in-out infinite;
   }
 
+  /* Battement de cœur : boum-boum, pause. Seule la lumière derrière le cercle bat. */
+  .heart {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 48%;
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffb65c66 0, #f26fa833 38%, transparent 68%);
+    opacity: 0.4;
+    pointer-events: none;
+    animation: lubdub 2.6s ease-in-out infinite;
+  }
+  @keyframes lubdub {
+    0%,
+    38%,
+    100% {
+      opacity: 0.4;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    9% {
+      opacity: 0.85;
+      transform: translate(-50%, -50%) scale(1.07);
+    }
+    18% {
+      opacity: 0.5;
+      transform: translate(-50%, -50%) scale(1.02);
+    }
+    27% {
+      opacity: 0.7;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+  }
+  @keyframes hubbeat {
+    0%,
+    38%,
+    100% {
+      box-shadow:
+        0 0 44px #ffb65c77,
+        0 0 110px #f26fa833,
+        inset 0 0 30px #ffb65c33;
+    }
+    9% {
+      box-shadow:
+        0 0 52px #ffb65c99,
+        0 0 120px #f26fa844,
+        inset 0 0 32px #ffb65c44;
+    }
+    27% {
+      box-shadow:
+        0 0 48px #ffb65c88,
+        0 0 114px #f26fa83b,
+        inset 0 0 31px #ffb65c3c;
+    }
+  }
+
+  /* Un seul dégradé : seule l'opacité change, donc la lumière s'allume et s'éteint en douceur. */
   .halo {
     position: absolute;
     aspect-ratio: 1;
     transform: translate(-50%, -50%) scale(0.85);
     border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--c) 18%, transparent) 0, transparent 68%);
+    background: radial-gradient(circle, color-mix(in srgb, var(--c) 65%, transparent) 0, transparent 68%);
+    opacity: 0.3;
     pointer-events: none;
     transition:
-      opacity 0.3s,
-      transform 0.3s;
+      opacity var(--t) var(--ease),
+      transform var(--t) var(--ease);
   }
   .halo.is-seed {
     opacity: 0;
@@ -269,10 +333,12 @@ const at = ({ slot, color }: (typeof items)[number]) =>
   .halo.is-active {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
-    background: radial-gradient(circle, color-mix(in srgb, var(--c) 59%, transparent) 0, transparent 68%);
   }
   .is-hovering .halo:not(.is-active) {
-    opacity: 0.3;
+    opacity: 0.09;
+  }
+  .is-hovering .halo.is-seed:not(.is-active) {
+    opacity: 0;
   }
 
   .node {
@@ -291,27 +357,34 @@ const at = ({ slot, color }: (typeof items)[number]) =>
     font-size: 2.4cqw;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 0 14px color-mix(in srgb, var(--c) 33%, transparent);
+    /* Trois ombres, comme à l'état actif, pour que le navigateur puisse les fondre. */
+    box-shadow:
+      0 0 15px color-mix(in srgb, var(--c) 33%, transparent),
+      0 0 0 transparent,
+      inset 0 0 0 transparent;
     transition:
-      transform 0.25s,
-      opacity 0.25s,
-      background 0.25s,
-      box-shadow 0.25s;
+      transform var(--t) var(--ease),
+      opacity var(--t) var(--ease),
+      background var(--t) var(--ease),
+      box-shadow var(--t) var(--ease);
   }
   .node.big {
     font-size: 3.2cqw;
   }
   .node.is-seed {
     border-style: dashed;
-    box-shadow: none;
+    box-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent,
+      inset 0 0 0 transparent;
     cursor: default;
   }
   .node.is-active {
     transform: translate(-50%, -50%) scale(1.12);
     background: color-mix(in srgb, var(--c) 20%, #14101f);
     box-shadow:
-      0 0 26px var(--c),
-      0 0 80px color-mix(in srgb, var(--c) 60%, transparent),
+      0 0 29px var(--c),
+      0 0 88px color-mix(in srgb, var(--c) 60%, transparent),
       inset 0 0 24px color-mix(in srgb, var(--c) 33%, transparent);
   }
   .is-hovering .node:not(.is-active) {
@@ -325,9 +398,9 @@ const at = ({ slot, color }: (typeof items)[number]) =>
     white-space: nowrap;
     pointer-events: none;
     transition:
-      opacity 0.25s,
-      color 0.25s,
-      text-shadow 0.25s;
+      opacity var(--t) var(--ease),
+      color var(--t) var(--ease),
+      text-shadow var(--t) var(--ease);
   }
   .label.big {
     font-size: clamp(12px, 2.7cqw, 22px);
@@ -361,8 +434,8 @@ const at = ({ slot, color }: (typeof items)[number]) =>
     opacity: 0;
     visibility: hidden;
     transition:
-      opacity 0.35s ease,
-      visibility 0.35s;
+      opacity var(--t) var(--ease),
+      visibility var(--t);
   }
   .fiche.is-visible {
     opacity: 1;

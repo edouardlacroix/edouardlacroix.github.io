@@ -12,37 +12,73 @@ const { slots, locale } = Astro.props;
 const items = toItems(slots, locale);
 ---
 
-<ol class="vine" aria-label={ui[locale].nexusLabel}>
-  {items.map((item) => {
-    const Tag = item.href ? 'a' : 'div';
-    return (
-      <li>
-        <Tag
-          class:list={['row', { 'is-seed': item.seed }]}
-          style={`--c:${item.color}`}
-          href={item.href}
-          target={item.href ? '_blank' : undefined}
-          rel={item.href ? 'noopener' : undefined}
-        >
-          <span class="bulb" aria-hidden="true">{item.initial}</span>
-          <span class="text">
-            <span class="status">{item.status}</span>
-            <span class="name">{item.name}</span>
-            <span class="desc">{item.description}</span>
-          </span>
-        </Tag>
-      </li>
-    );
-  })}
-</ol>
+<div class="vine-wrap" data-vine>
+  <!-- Deux lueurs douces glissent le long du tronc, comme un influx dans un câble. -->
+  <span class="pulse" aria-hidden="true"></span>
+  <span class="pulse pulse-2" aria-hidden="true"></span>
+
+  <ol class="vine" aria-label={ui[locale].nexusLabel}>
+    {items.map((item) => {
+      const Tag = item.href ? 'a' : 'div';
+      return (
+        <li>
+          <Tag
+            class:list={['row', { 'is-seed': item.seed }]}
+            style={`--c:${item.color}`}
+            href={item.href}
+            target={item.href ? '_blank' : undefined}
+            rel={item.href ? 'noopener' : undefined}
+          >
+            <span class="bulb" aria-hidden="true">{item.initial}</span>
+            <span class="text">
+              <span class="status">{item.status}</span>
+              <span class="name">{item.name}</span>
+              <span class="desc">{item.description}</span>
+            </span>
+          </Tag>
+        </li>
+      );
+    })}
+  </ol>
+</div>
+
+<script>
+  // Cycle de l'influx : 3,6 s, dont 2,88 s de trajet. Chaque nœud s'allume quand la lueur passe devant lui.
+  const TRAVEL = 2.88;
+  const PULSE_HEIGHT = 110;
+
+  const wrap = document.querySelector<HTMLElement>('[data-vine]');
+  if (wrap) {
+    const sync = () => {
+      const height = wrap.offsetHeight;
+      const wrapTop = wrap.getBoundingClientRect().top;
+      wrap.querySelectorAll<HTMLElement>('.row:not(.is-seed)').forEach((row) => {
+        const rect = row.getBoundingClientRect();
+        const center = rect.top - wrapTop + rect.height / 2;
+        // La lueur part au-dessus du tronc (-PULSE_HEIGHT) et finit en bas : trajet de height + PULSE_HEIGHT.
+        const delay = ((center + PULSE_HEIGHT / 2) / (height + PULSE_HEIGHT)) * TRAVEL;
+        row.style.setProperty('--d', `${delay.toFixed(2)}s`);
+      });
+    };
+    sync();
+    window.addEventListener('resize', sync);
+    document.fonts?.ready.then(sync);
+  }
+</script>
 
 <style>
-  .vine {
+  .vine-wrap {
     display: none;
     position: relative;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .vine {
+    position: relative;
+    margin: 0;
     padding: 32px 16px 16px;
     list-style: none;
   }
@@ -58,6 +94,38 @@ const items = toItems(slots, locale);
     border-radius: 2px;
     background: linear-gradient(#f26fa8, #ffb65c, #7cc8ff);
     box-shadow: 0 0 14px rgb(255 182 92 / 0.5);
+  }
+
+  .pulse {
+    position: absolute;
+    left: 44px;
+    top: -110px;
+    width: 34px;
+    height: 110px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse at center,
+      rgb(255 243 224 / 0.55) 0,
+      rgb(255 182 92 / 0.35) 35%,
+      transparent 70%
+    );
+    filter: blur(7px);
+    pointer-events: none;
+    animation: flow 3.6s linear infinite;
+  }
+  .pulse-2 {
+    opacity: 0.35;
+    animation-delay: -1.8s;
+  }
+  @keyframes flow {
+    0% {
+      top: -110px;
+    }
+    80%,
+    100% {
+      top: 100%;
+    }
   }
 
   .row {
@@ -83,6 +151,9 @@ const items = toItems(slots, locale);
     background: linear-gradient(90deg, #fff3e0, var(--c));
     box-shadow: 0 0 10px color-mix(in srgb, var(--c) 60%, transparent);
   }
+  .row:not(.is-seed)::before {
+    animation: branch-spark 3.6s linear calc(var(--d, 0s) - 0.08s) infinite;
+  }
 
   .bulb {
     justify-self: end;
@@ -98,11 +169,17 @@ const items = toItems(slots, locale);
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 18px;
-    box-shadow: 0 0 12px color-mix(in srgb, var(--c) 33%, transparent);
+    box-shadow:
+      0 0 12px color-mix(in srgb, var(--c) 33%, transparent),
+      0 0 0 transparent,
+      inset 0 0 0 transparent;
     transition:
-      transform 0.25s,
-      box-shadow 0.25s,
-      background 0.25s;
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .row:not(.is-seed) .bulb {
+    animation: ignite 3.6s linear var(--d, 0s) infinite;
   }
 
   a.row:hover .bulb,
@@ -116,11 +193,34 @@ const items = toItems(slots, locale);
       inset 0 0 18px color-mix(in srgb, var(--c) 33%, transparent);
   }
 
+  @keyframes ignite {
+    0%,
+    22%,
+    100% {
+      filter: brightness(1);
+    }
+    4% {
+      filter: brightness(1.8) drop-shadow(0 0 8px currentColor);
+    }
+  }
+  @keyframes branch-spark {
+    0%,
+    20%,
+    100% {
+      box-shadow: 0 0 10px color-mix(in srgb, var(--c) 60%, transparent);
+    }
+    4% {
+      box-shadow: 0 0 20px var(--c);
+    }
+  }
+
   .is-seed .bulb {
     border-style: dashed;
-    box-shadow: none;
+    box-shadow:
+      0 0 0 transparent,
+      0 0 0 transparent,
+      inset 0 0 0 transparent;
   }
-  .is-seed .row::before,
   .row.is-seed::before {
     opacity: 0.5;
     box-shadow: none;
@@ -141,6 +241,9 @@ const items = toItems(slots, locale);
   .name {
     font-weight: 600;
     font-size: 18px;
+    transition:
+      color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      text-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .desc {
     font-size: 14px;
@@ -158,8 +261,15 @@ const items = toItems(slots, locale);
   }
 
   @media (max-width: 760px) {
-    .vine {
+    .vine-wrap {
       display: block;
+    }
+  }
+
+  /* Sans animation, pas de lueur arrêtée en haut du tronc. */
+  @media (prefers-reduced-motion: reduce) {
+    .pulse {
+      display: none;
     }
   }
 </style>
